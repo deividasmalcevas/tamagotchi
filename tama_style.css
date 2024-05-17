@@ -10,3 +10,25 @@ body{
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
 }
+.select_tama_wrapper{
+    margin-top: 30px;
+    padding: 20px;
+    border: solid white 1px;
+    border-radius: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+.select_tama{
+    font-size: 50px;
+    padding: 5px;
+    border: solid white 1px;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.select_tama:hover{
+    background: rgba(255, 255, 255, 0.55);
+    transform: scale(1.05);
+}
