@@ -5,13 +5,15 @@ body{
     display: none;
 }
 .start_game_wrapper{
+    margin-top: -20px;
+    z-index: 3;
     position: fixed;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
 }
 .select_tama_wrapper{
-    margin-top: 30px;
+    margin-top: 100px;
     padding: 20px;
     border: solid white 1px;
     border-radius: 2rem;
@@ -31,4 +33,50 @@ body{
 .select_tama:hover{
     background: rgba(255, 255, 255, 0.55);
     transform: scale(1.05);
+}
+.progress_bars{
+    border: solid white 1px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 10px;
+}
+.progress-container {
+    flex-grow: 1;
+}
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0;
+    background-color: #cb3174;
+    border-radius: 15px;
+    transition: width 0.3s ease;
+}
+label {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+}
+.play_area{
+    border: solid white 1px;
+    background: url("https://i.pinimg.com/originals/b7/51/99/b75199c581eac1c1811942128df86690.jpg") center;
+    background-size: cover;
+    width: 100%;
+    height: 700px;
+    position: relative;
+}
+.new_tama{
+    font-size: 50px;
+    position: absolute;
+    top:0;
+    left: 0;
 }

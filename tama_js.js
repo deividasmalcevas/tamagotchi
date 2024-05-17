@@ -2,6 +2,10 @@
 //get from HTML----
 const start = document.getElementById(`start`);
 const select_tama = document.getElementById(`select_tama`);
+const hp_bar = document.getElementById('hp-fill');
+const hunger_bar = document.getElementById('hunger-fill');
+const fun_bar = document.getElementById('fun-fill');
+const play_area = document.getElementById('play_area');
 const Tamas = [
     { name: 'ant', emoji: '🐜' },
     { name: 'badger', emoji: '🦡' },
@@ -60,7 +64,6 @@ const Tamas = [
     { name: 'penguin', emoji: '🐧' },
     { name: 'pig', emoji: '🐖' },
     { name: 'poodle', emoji: '🐩' },
-    { name: 'rabbit', emoji: '🐇' },
     { name: 'rabbit', emoji: '🐰' },
     { name: 'raccoon', emoji: '🦝' },
     { name: 'ram', emoji: '🐏' },
@@ -90,6 +93,7 @@ const Tamas = [
     { name: 'zebra', emoji: '🦓' }
 ];
 let Selected_Tama;
+let move = true;
 //init
 select_board();
 //functions
@@ -100,12 +104,48 @@ function select_board() {
         const tama = document.createElement('div');
         tama.classList.add('select_tama');
         tama.textContent = `${new_tama.emoji}`;
+        tama.title = new_tama.name;
         tama.onclick = () => {
             if (!start)
                 return console.log(`empty start div`);
             start.classList.toggle(`hidden`);
             Selected_Tama = new_tama;
+            update_bars(RNG(60, 80), RNG(40, 70), RNG(40, 70));
+            add_tama_to_playground(Selected_Tama);
         };
         select_tama.appendChild(tama);
     });
+}
+function add_tama_to_playground(new_tama) {
+    if (play_area) {
+        const newTama = document.createElement('div');
+        newTama.classList.add('new_tama');
+        newTama.textContent = new_tama.emoji;
+        play_area.appendChild(newTama);
+        move_anim(newTama, play_area.clientWidth - newTama.clientWidth, play_area.clientHeight - newTama.clientHeight);
+    }
+}
+function move_anim(newTama, maxX, maxY) {
+    const duration = RNG(2000, 5000);
+    const delay = RNG(0, 1000);
+    newTama.style.transition = `left ${duration}ms ease-out ${delay}ms, top ${duration}ms ease-out ${delay}ms`;
+    newTama.style.left = `${RNG(0, maxX)}px`;
+    newTama.style.top = `${RNG(0, maxY)}px`;
+    setTimeout(() => {
+        move_anim(newTama, maxX, maxY);
+    }, duration + delay);
+}
+function update_bars(hp, hunger, fun) {
+    if (hp_bar)
+        setProgress(hp_bar, hp);
+    if (hunger_bar)
+        setProgress(hunger_bar, hunger);
+    if (fun_bar)
+        setProgress(fun_bar, fun);
+}
+function setProgress(element, value) {
+    element.style.width = value + '%';
+}
+function RNG(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
