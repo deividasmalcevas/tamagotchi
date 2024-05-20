@@ -115,7 +115,10 @@ label {
     position: absolute;
     display: none;
 }
-
 .hole.up .mole {
     display: block;
+}
+.sprite{
+    width: 64px;
+    height: 64px;
 }

@@ -103,8 +103,17 @@ const Tamas: Tama_emoji[] = [
     { name: 'unicorn', emoji: '🦄' },
     { name: 'whale', emoji: '🐋' },
     { name: 'wolf', emoji: '🐺' },
-    { name: 'zebra', emoji: '🦓' }
+    { name: 'zebra', emoji: '🦓' },
+    { name: 'link', emoji: 'sprite' }
 ];
+interface Sprite {
+    name: string;
+    url: string;
+}
+const Sprites: Sprite[] = [
+    { name: 'link', url: 'https://i.imgur.com/sCrkzvs.png' }
+];
+
 let Selected_Tama: Tama_emoji;
 let move: boolean = true
 let tama_hp: number
@@ -112,7 +121,7 @@ let tama_hunger:number
 let tama_fun:number
 let tama_exp:number
 let tama_lvl:number
-let size:number = 20
+let size:number = 1
 let lastHole: HTMLElement;
 let timeUp:boolean = false;
 let score:number = 0;
@@ -185,12 +194,33 @@ holes.forEach(hole => {
     hole.addEventListener('click', whack);
 });
 //
+let backgroundPositionX: number = 0;
+
+function updateSprite(sprite: HTMLDivElement)  {
+    backgroundPositionX -= 64;
+    if (backgroundPositionX <= -256) {
+        backgroundPositionX = 0;
+    }
+    sprite.style.backgroundPosition = `${backgroundPositionX}px 0`;
+}
+
 function select_board() {
     if(!select_tama) return console.log(`empty tama List`)
     Tamas.forEach((new_tama) => {
         const tama = document.createElement('div');
         tama.classList.add('select_tama');
-        tama.textContent = `${new_tama.emoji}`;
+        if(new_tama.emoji === `sprite`){
+            Sprites.forEach((sprite) => {
+                if(sprite.name === new_tama.name){
+                    tama.classList.add(`sprite`)
+                    tama.style.backgroundImage = `url("${sprite.url}")`
+                    tama.style.transition = `none`
+                    setInterval(() => updateSprite(tama), 200);
+                }
+            })
+        }
+        else  tama.textContent = `${new_tama.emoji}`;
+
         tama.title = new_tama.name;
         tama.onclick = () => {
             if(!start) return console.log(`empty start div`)
@@ -211,8 +241,18 @@ function add_tama_to_playground(new_tama: Tama_emoji) {
     if(play_area){
         const newTama = document.createElement('div');
         newTama.classList.add('new_tama');
-        newTama.style.fontSize = `${size}px`
+        newTama.style.fontSize = `25px`
         newTama.textContent = new_tama.emoji;
+        Sprites.forEach((sprite) => {
+            if(sprite.name === new_tama.name){
+                newTama.textContent = ` `
+                newTama.classList.add(`sprite`)
+                newTama.style.backgroundImage = `url("${sprite.url}")`
+                newTama.style.transition = `none`
+                setInterval(() => updateSprite(newTama), 200);
+            }
+        })
+
         play_area.appendChild(newTama);
         move_anim(newTama)
     }
@@ -245,7 +285,7 @@ function check_status(newTama:HTMLDivElement){
             if(tama_lvl < 100){
                 tama_hunger--
                 tama_fun--
-                tama_exp +=  (100 - tama_lvl) / 100
+                tama_exp += 10 * (100 - tama_lvl) / 100
                 if(tama_exp >= 100){
                     tama_exp = 0
                     lvl_up(newTama)
@@ -267,8 +307,8 @@ function check_status(newTama:HTMLDivElement){
 }
 function lvl_up(newTama : HTMLDivElement){
     tama_lvl++;
-    size += 5
-    newTama.style.fontSize = `${size}px`
+    size += 0.1
+    newTama.style.transform = `scale(${size})`
     if(lvl_display)
         lvl_display.textContent = tama_lvl.toString()
 
