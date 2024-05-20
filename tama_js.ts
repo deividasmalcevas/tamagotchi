@@ -329,7 +329,7 @@ function check_direction(prev_x: number = 0, prev_y: number = 0, new_x: number, 
     if (Math.abs(diff_x) > Math.abs(diff_y)) {
         walk_direction = diff_x < 0 ? 'right' : 'left';
     } else {
-        walk_direction = diff_y < 0 ? 'back' : 'forward';
+        walk_direction = diff_y < 0 ? 'forward' : 'back';
     }
 }
 function check_status(newTama:HTMLDivElement){

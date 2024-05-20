@@ -319,7 +319,7 @@ function check_direction(prev_x = 0, prev_y = 0, new_x, new_y) {
         walk_direction = diff_x < 0 ? 'right' : 'left';
     }
     else {
-        walk_direction = diff_y < 0 ? 'back' : 'forward';
+        walk_direction = diff_y < 0 ? 'forward' : 'back';
     }
 }
 function check_status(newTama) {
