@@ -247,6 +247,9 @@ function check_status(newTama) {
                     lvl_up(newTama);
                 }
             }
+            if (tama_fun > 50 && tama_hunger > 50) {
+                tama_hp++;
+            }
         }
         else {
             tama_hp -= (100 - tama_lvl) / 100;
