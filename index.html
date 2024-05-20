@@ -22,10 +22,36 @@
     <div id="start" class="start_game_wrapper">
         <div class="container">
             <h4 class="text-center mt-5">Select your tamagotchi</h4>
-            <div id="select_tama" class="select_tama_wrapper">
+            <div id="select_tama" class="select_tama_wrapper"></div>
+        </div>
+    </div>
+    <div id="end" class="start_game_wrapper hidden">
+        <div class="container">
+            <h4 class="text-center mt-5">Game over</h4>
+            <h5 class="text-center mt-5">Your tamagotchi died!</h5>
+        </div>
+    </div>
+    <div id="game_start" class="start_game_wrapper hidden">
+        <div class="container">
+            <div id="game">
+                <div class="score-board">
+                    Score: <span id="score">0</span>
+                </div>
+                <div class="grid">
+                    <div class="hole" data-index="0"></div>
+                    <div class="hole" data-index="1"></div>
+                    <div class="hole" data-index="2"></div>
+                    <div class="hole" data-index="3"></div>
+                    <div class="hole" data-index="4"></div>
+                    <div class="hole" data-index="5"></div>
+                    <div class="hole" data-index="6"></div>
+                    <div class="hole" data-index="7"></div>
+                    <div class="hole" data-index="8"></div>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="progress_bars">
             <div class="progress-container">
@@ -51,9 +77,20 @@
         </div>
         <div class="progress_bars">
             <h3>Tamagotchi level: <span id="tama_lvl">0</span> </h3>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="lvl-bar">
+                    <div class="progress-bar-fill" id="lvl-fill"></div>
+                </div>
+                <label for="lvl-bar">Exp</label>
+            </div>
         </div>
         <div id="play_area" class="play_area">
 
+        </div>
+        <div class="progress_bars justify-content-center">
+            <button id="btn_feed" type="button" class="btn btn-light">Feed</button>
+            <button id="btn_play" type="button" class="btn btn-light">Play</button>
         </div>
     </div>
 </body>

@@ -1,5 +1,6 @@
 body{
     color: white;
+    user-select: none;
 }
 .hidden{
     display: none;
@@ -75,8 +76,46 @@ label {
     position: relative;
 }
 .new_tama{
-    font-size: 50px;
     position: absolute;
     top:0;
     left: 0;
+}
+/*wack amole*/
+
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-board {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 10px;
+}
+
+.hole {
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    background: url("https://i.pinimg.com/736x/0d/f9/24/0df92471c6b1ff0d0b029339da10ae90.jpg") center no-repeat;
+    position: relative;
+    font-size: 50px;
+    text-align: center;
+}
+
+.mole {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    display: none;
+}
+
+.hole.up .mole {
+    display: block;
 }
