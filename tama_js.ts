@@ -125,7 +125,10 @@ let size:number = 1
 let lastHole: HTMLElement;
 let timeUp:boolean = false;
 let score:number = 0;
-
+let intervalIDs: number[] = [];
+let backgroundPositionX: number = 0;
+let backgroundPositionY: number = 0;
+let walk_direction : string = `forward`
 //init
 select_board()
 //btn click
@@ -158,7 +161,18 @@ function randomHole(holes: NodeListOf<HTMLElement>): HTMLElement {
 function peep(): void {
     const time = RNG(200, 1000);
     const hole = randomHole(holes);
-    hole.textContent = Selected_Tama.emoji
+    if(Selected_Tama.emoji === `sprite`){
+        Sprites.forEach((sprite) => {
+            if(sprite.name === Selected_Tama.name){
+                const sp = document.createElement('div');
+                sp.style.backgroundImage = `url("${sprite.url}")`
+                sp.style.width = `64px`
+                sp.style.height = `64px`
+                hole.appendChild(sp)
+            }
+        })
+    }
+    else hole.textContent = Selected_Tama.emoji
     hole.classList.add('up');
     setTimeout(() => {
         hole.textContent = ``
@@ -193,15 +207,25 @@ holes.forEach(hole => {
     hole.appendChild(mole);
     hole.addEventListener('click', whack);
 });
-//
-let backgroundPositionX: number = 0;
-
-function updateSprite(sprite: HTMLDivElement)  {
+//------
+function update_Sprite(sprite: HTMLDivElement)  {
+    if(walk_direction === `forward`){
+        backgroundPositionY = 0;
+    }
+    if(walk_direction === `back`){
+        backgroundPositionY = 64;
+    }
+    if(walk_direction === `left`){
+        backgroundPositionY = 192;
+    }
+    if(walk_direction === `right`){
+        backgroundPositionY = 128;
+    }
     backgroundPositionX -= 64;
     if (backgroundPositionX <= -256) {
         backgroundPositionX = 0;
     }
-    sprite.style.backgroundPosition = `${backgroundPositionX}px 0`;
+    sprite.style.backgroundPosition = `${backgroundPositionX}px ${backgroundPositionY}px`;
 }
 
 function select_board() {
@@ -215,7 +239,8 @@ function select_board() {
                     tama.classList.add(`sprite`)
                     tama.style.backgroundImage = `url("${sprite.url}")`
                     tama.style.transition = `none`
-                    setInterval(() => updateSprite(tama), 200);
+                    const intervalID = setInterval(() => update_Sprite(tama), 200);
+                    intervalIDs.push(intervalID);
                 }
             })
         }
@@ -246,16 +271,29 @@ function add_tama_to_playground(new_tama: Tama_emoji) {
         Sprites.forEach((sprite) => {
             if(sprite.name === new_tama.name){
                 newTama.textContent = ` `
-                newTama.classList.add(`sprite`)
+                setImageSize(sprite.url, newTama, 4)
                 newTama.style.backgroundImage = `url("${sprite.url}")`
                 newTama.style.transition = `none`
-                setInterval(() => updateSprite(newTama), 200);
+                clear_intervals()
+                const intervalID = setInterval(() => update_Sprite(newTama), 200);
+                intervalIDs.push(intervalID);
             }
         })
-
         play_area.appendChild(newTama);
         move_anim(newTama)
     }
+}
+function clear_intervals() {
+    intervalIDs.forEach(id => clearInterval(id));
+    intervalIDs = [];
+}
+function setImageSize(url: string, element: HTMLDivElement, divided: number): void {
+    const img = new Image();
+    img.onload = function() {
+        element.style.width = `${img.width / divided}px`;
+        element.style.height = `${img.height / divided}px`;
+    };
+    img.src = url;
 }
 function move_anim(newTama:HTMLDivElement){
     let maxX: number
@@ -267,8 +305,13 @@ function move_anim(newTama:HTMLDivElement){
         const duration = RNG(2000, 5000)
         const delay = RNG(0, 1000)
         newTama.style.transition = `left ${duration}ms ease-out ${delay}ms, top ${duration}ms ease-out ${delay}ms`;
-        newTama.style.left = `${RNG(0,maxX)}px`;
-        newTama.style.top = `${RNG(0,maxY)}px`;
+
+        let new_x: number = RNG(0,maxX)
+        let new_y: number = RNG(0,maxY)
+        check_direction(parseInt(newTama.style.left), parseInt(newTama.style.top), new_x, new_y)
+
+        newTama.style.left = `${new_x}px`;
+        newTama.style.top = `${new_y}px`;
 
         setTimeout(() => {
             if(move){
@@ -277,6 +320,16 @@ function move_anim(newTama:HTMLDivElement){
                 move_anim(newTama)
             }
         }, duration + delay);
+    }
+}
+function check_direction(prev_x: number = 0, prev_y: number = 0, new_x: number, new_y: number): void {
+    const diff_x = prev_x - new_x;
+    const diff_y = prev_y - new_y;
+
+    if (Math.abs(diff_x) > Math.abs(diff_y)) {
+        walk_direction = diff_x < 0 ? 'right' : 'left';
+    } else {
+        walk_direction = diff_y < 0 ? 'back' : 'forward';
     }
 }
 function check_status(newTama:HTMLDivElement){
